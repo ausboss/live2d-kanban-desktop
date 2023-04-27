@@ -27,64 +27,64 @@ const { ipcRenderer,shell } = nodeRequire('electron'); //Electron 依赖调入
 // 后端接口
 live2d_settings.modelAPI             = '//waifuapi.zerolite.cn/live2d-api/';   // 自建 API 修改这里
 live2d_settings.tipsMessage          = 'waifu-tips.json';            // 同目录下可省略路径
-live2d_settings.hitokotoAPI          = 'hitokoto.cn';                // 一言 API，可选 'lwl12.com', 'hitokoto.cn', 'jinrishici.com'(古诗词)
+// live2d_settings.hitokotoAPI          = 'hitokoto.cn';                // 一言 API，可选 'lwl12.com', 'hitokoto.cn', 'jinrishici.com'(古诗词)
 live2d_settings.eyeProtInfo          = true;                         //启用使用时长提醒
+// Variables for time reminder
+var setTime = 0; // Set reminder time (in minutes)
+var isTimeSet = false; // Is the reminder enabled?
+var date, TargetTime = 0; // Stop time
+var timer;
+var timercontext; // Schedule timing variable
+var Quality = 2; // Rendering accuracy variable
+var ShowMessageLocker = 0; // Dialogue bubble process lock
 
-//使用时长提醒需要的变量
-var setTime = 0; //设定的提醒时间(单位分钟)
-var isTimeSet = false; //是否启用？
-var date,TargetTime = 0;//停止时间
-var timer; var timercontext; //日程定时变量
-var Quality = 2; //渲染精度变量
-var ShowMessageLocker = 0; //对话泡进程锁
+// Default model
+live2d_settings.modelId = 19; // Default model ID, can be found in F12 console
+live2d_settings.modelTexturesId = 1; // Default material ID, can be found in F12 console
 
+// Toolbar settings
+live2d_settings.showToolMenu = true; // Show toolbar, optional true (true), false (false)
+live2d_settings.alwaysshowToolMenu = true; // Do not hide the toolbar *It is recommended to enable it when using the desktop version, optional true (true), false (false)
+live2d_settings.canCloseLive2d = true; // Show "close" button for the character, optional true (true), false (false)
+live2d_settings.canSwitchModel = true; // Show "switch model" button, optional true (true), false (false)
+live2d_settings.canSwitchTextures = true; // Show "switch texture" button, optional true (true), false (false)
+live2d_settings.canSwitchHitokoto = true; // Show "switch hitokoto" button, optional true (true), false (false)
+live2d_settings.canTakeScreenshot = true; // Show "screenshot" button for the character, optional true (true), false (false)
+live2d_settings.canTurnToHomePage = false; // Show "return to homepage" button, optional true (true), false (false)
+live2d_settings.canTurnToAboutPage = true; // Show "jump to about page" button, optional true (true), false (false)
+live2d_settings.canEyesCare = true; // Show "night mode" button, optional true (true), false (false)
 
-// 默认模型
-live2d_settings.modelId              = 19;          // 默认模型 ID，可在 F12 控制台找到
-live2d_settings.modelTexturesId      = 1;           // 默认材质 ID，可在 F12 控制台找到
+// Model switching mode
+live2d_settings.modelStorage = true; // Record ID (restore after refresh), optional true (true), false (false)
+live2d_settings.modelRandMode = 'switch'; // Model switching, optional 'rand' (random), 'switch' (order)
+live2d_settings.modelTexturesRandMode = 'rand'; // Material switching, optional 'rand' (random), 'switch' (order)
 
-// 工具栏设置
-live2d_settings.showToolMenu         = true;         // 显示 工具栏 ，可选 true(真), false(假)
-live2d_settings.alwaysshowToolMenu   = true;         // 不隐藏 工具栏 *作为桌面版本使用时建议开启，可选 true(真), false(假)
-live2d_settings.canCloseLive2d       = true;         // 显示 关闭看板娘  按钮，可选 true(真), false(假)
-live2d_settings.canSwitchModel       = true;         // 显示 模型切换    按钮，可选 true(真), false(假)
-live2d_settings.canSwitchTextures    = true;         // 显示 材质切换    按钮，可选 true(真), false(假)
-live2d_settings.canSwitchHitokoto    = true;         // 显示 一言切换    按钮，可选 true(真), false(假)
-live2d_settings.canTakeScreenshot    = true;         // 显示 看板娘截图  按钮，可选 true(真), false(假)
-live2d_settings.canTurnToHomePage    = false;        // 显示 返回首页    按钮，可选 true(真), false(假)
-live2d_settings.canTurnToAboutPage   = true;         // 显示 跳转关于页  按钮，可选 true(真), false(假)
-live2d_settings.canEyesCare          = true;         // 显示 夜间模式    按钮，可选 true(真), false(假)
+// Prompt message options
+live2d_settings.showHitokoto = true; // Show hitokoto
+live2d_settings.showF12Status = true; // Show loading status
+live2d_settings.showF12Message = true; // Show character message
+live2d_settings.showF12OpenMsg = true; // Show console open prompt
+live2d_settings.showWelcomeMessage = true; // Show welcome message when entering the page
 
-// 模型切换模式
-live2d_settings.modelStorage         = true;         // 记录 ID (刷新后恢复)，可选 true(真), false(假)
-live2d_settings.modelRandMode        = 'switch';     // 模型切换，可选 'rand'(随机), 'switch'(顺序)
-live2d_settings.modelTexturesRandMode= 'rand';       // 材质切换，可选 'rand'(随机), 'switch'(顺序)
+// Waifu Style Settings
+live2d_settings.waifuSize = '300x360';    // Size of the waifu, e.g. '280x250', '600x535'
+live2d_settings.waifuTipsSize = '263x72'; // Size of the tooltip, e.g. '250x70', '570x150'
+live2d_settings.waifuFontSize = '17px';   // Font size of the tooltip, e.g. '12px', '30px'
+live2d_settings.waifuToolFont = '20px';   // Font size of the toolbar, e.g. '14px', '36px'
+live2d_settings.waifuToolLine = '30px';   // Line height of the toolbar, e.g. '20px', '36px'
+live2d_settings.waifuToolTop = '-60px';   // Top margin of the toolbar, e.g. '0px', '-60px'
+live2d_settings.waifuMinWidth = 'disable';// Hide the waifu if the page width is less than the specified value, e.g. 'disable' (disabled), '768px'
+live2d_settings.waifuEdgeSide = 'left:0'; // The direction where the waifu sticks to, e.g. 'left:0' (left-aligned 0px), 'right:30' (right-aligned 30px)
+live2d_settings.waifuDraggable = 'unlimited'; // Draggable style, e.g. 'disable' (disabled), 'axis-x' (only horizontally draggable), 'unlimited' (freely draggable)
+live2d_settings.waifuDraggableRevert = true; // Revert to the original position after releasing the mouse, either true (yes) or false (no)
 
-// 提示消息选项
-live2d_settings.showHitokoto         = true;         // 显示一言
-live2d_settings.showF12Status        = true;         // 显示加载状态
-live2d_settings.showF12Message       = true;         // 显示看板娘消息
-live2d_settings.showF12OpenMsg       = true;         // 显示控制台打开提示
-live2d_settings.showWelcomeMessage   = true;         // 显示进入页面欢迎词
+// Other miscellaneous settings
+live2d_settings.l2dVersion = '2.6.0';             // Current version
+live2d_settings.l2dVerDate = '2023-03-15';        // Version update date
+live2d_settings.homePageUrl = 'https://www.zerolite.cn/'; // Homepage URL (deprecated)
+live2d_settings.aboutPageUrl = 'https://www.zerolite.cn/';// About page URL
+live2d_settings.screenshotCaptureName = 'kanban.png';    // File name of the waifu screenshot, e.g. 'live2d.png'
 
-//看板娘样式设置
-live2d_settings.waifuSize            = '300x360';    // 看板娘大小，例如 '280x250', '600x535'
-live2d_settings.waifuTipsSize        = '263x72';     // 提示框大小，例如 '250x70', '570x150'
-live2d_settings.waifuFontSize        = '17px';       // 提示框字体，例如 '12px', '30px'
-live2d_settings.waifuToolFont        = '20px';       // 工具栏字体，例如 '14px', '36px'
-live2d_settings.waifuToolLine        = '30px';       // 工具栏行高，例如 '20px', '36px'
-live2d_settings.waifuToolTop         = '-60px';      // 工具栏顶部边距，例如 '0px', '-60px'
-live2d_settings.waifuMinWidth        = 'disable';    // 面页小于 指定宽度 隐藏看板娘，例如 'disable'(禁用), '768px'
-live2d_settings.waifuEdgeSide        = 'left:0';     // 看板娘贴边方向，例如 'left:0'(靠左 0px), 'right:30'(靠右 30px)
-live2d_settings.waifuDraggable       = 'unlimited';    // 拖拽样式，例如 'disable'(禁用), 'axis-x'(只能水平拖拽), 'unlimited'(自由拖拽)
-live2d_settings.waifuDraggableRevert = true;         // 松开鼠标还原拖拽位置，可选 true(真), false(假)
-
-// 其他杂项设置
-live2d_settings.l2dVersion           = '2.6.0';                               // 当前版本
-live2d_settings.l2dVerDate           = '2023-03-15';                          // 版本更新日期
-live2d_settings.homePageUrl          = 'https://www.zerolite.cn/';            // 主页地址，已弃用
-live2d_settings.aboutPageUrl         = 'https://www.zerolite.cn/';            // 关于页地址
-live2d_settings.screenshotCaptureName= 'kanban.png';                          // 看板娘截图文件名，例如 'live2d.png'
 
 /****************************************************************************************************/
 
@@ -533,44 +533,48 @@ function loadTipsMessage(result) {
 
     $('.waifu-tool .fui-Set').click(function() {ipcRenderer.send('Settings','Open');}); // 设置调起
 
-    /*夜间模式*/
-    $('.waifu-tool .fui-moon').click(function () { cover(0.3); showMessage('夜间模式开启成功!按alt+↑可提高亮度,按alt+↓可降低亮度,按alt+x可取消夜间模式', 5000, true) });
-	
+/* Night mode */
+$('.waifu-tool .fui-moon').click(function() {
+    cover(0.3);
+    showMessage('Night mode enabled! Press alt+↑ to increase brightness, alt+↓ to decrease brightness, alt+x to disable night mode.', 5000, true);
+  });
+  
     /*日程提醒模块点击*/
-	if(live2d_settings.eyeProtInfo){
-	$('.waifu-tool .fui-eyeProtInfo').click(function (){
-		document.getElementById('NLPInfinite').style.display = 'block';
-        $('#timeset').focus();
-		if(isTimeSet === true && setTime != "" && setTime > 0)
-		{document.getElementById('TimeDisplay').innerHTML = "距定时结束剩余 "+(setTime-(new Date()-date)/60000).toFixed(1)+" 分钟";}
-		else {document.getElementById('TimeDisplay').innerHTML = "没有定时";}
-	});}
+    if(live2d_settings.eyeProtInfo){
+        $('.waifu-tool .fui-eyeProtInfo').click(function(){
+          document.getElementById('NLPInfinite').style.display = 'block';
+          $('#timeset').focus();
+          if(isTimeSet === true && setTime != "" && setTime > 0){
+            document.getElementById('TimeDisplay').innerHTML = "Remaining time until the scheduled end: "+(setTime-(new Date()-date)/60000).toFixed(1)+" minutes";
+          } else {
+            document.getElementById('TimeDisplay').innerHTML = "No scheduled time";
+          }
+        });
+      }
+      
 	
     /*************************日程提醒函数*************************/
-	function Schedulefunc()
-	{
-		timer = setInterval(function(){
-            showMessage('你所预定的日程'+timercontext+'的提醒时间'+setTime+'已经到了!',5000,true);
-            let myNotification = new Notification(timercontext, {
-             // 通知的标题, 将在通知窗口的顶部显示
-            title: '日程提醒',
-            // 通知的副标题, 显示在标题下面 macOS
-            subtitle: 'Kanban-Desktop',
-            // 通知的正文文本, 将显示在标题或副标题下面
-            body: '你所预定的日程时间已经到了，点击此条消息停止响铃',
-            // false有声音，true没声音
-            silent: false,
-            icon: './assets/notifi.jpg',
-            // 通知的超时持续时间 'default' or 'never'
-            timeoutType: 'never',
-        })
-        var rand = Math.floor(Math.random()*6);
-		var audio= new Audio("./Alert Alarms/alert"+rand+".mp3"); // 这里的路径为mp3文件在项目中的绝对路径
-        audio.play();//播放
-        myNotification.onclick = () => {
-            audio.pause();//暂停
-            };date = new Date();},setTime*60000);
-	}
+	function Schedulefunc() {
+        timer = setInterval(function() {
+          showMessage(`Your scheduled event "${timercontext}" reminder time ${setTime} has arrived!`, 5000, true);
+          let myNotification = new Notification("日程提醒", {
+            title: 'Reminder', 
+            subtitle: 'Kanban-Desktop', 
+            body: 'Your scheduled event time has arrived. Click this message to stop ringing.',
+            silent: false, 
+            icon: './assets/notifi.jpg', 
+            timeoutType: 'never', 
+          });
+          var rand = Math.floor(Math.random() * 6);
+          var audio = new Audio(`./Alert Alarms/alert${rand}.mp3`); 
+          audio.play();
+          myNotification.onclick = () => {
+            audio.pause();
+          };
+          date = new Date();
+        }, setTime * 60000);
+      }
+      
 
 	//工具栏默认隐藏
 	document.getElementById('NLP2').style.display = 'none';
