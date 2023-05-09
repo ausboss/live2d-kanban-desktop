@@ -1,6 +1,6 @@
 const axios = nodeRequire('axios')
 
-const GptAnswerCross = "<span class='fui-cross' onclick=\"hideMessageLocked(500);document.getElementById('nlp').value='';\" style=' font-size: 13px;z-index: 100;position: absolute;padding:5px;right: 0px;top:0px' ></span>"
+const GptAnswerCross = "<span class='fui-cross' onclick=\"MessageLocked(500);document.getElementById('nlp').value='';\" style=' font-size: 13px;z-index: 100;position: absolute;padding:5px;right: 0px;top:0px' ></span>"
 
 async function gptrun(sentense,answerDiv) {
     // document.getElementById(answerDiv).style.padding='10px';
@@ -29,6 +29,9 @@ const response = await axios({
     },
 })
     if (response.status >= 200 && response.status < 300) {
+        $(".waifu-tips").css("visibility", "visible");
+        //make .waifu-tips dissappear after 10 seconds
+        // setTimeout(function(){$(".waifu-tips").css("visibility", "");},10000);
         showMessageLocked(GptAnswerCross+response.data.choices[0].message.content);
         console.log('[response]', response.data)
         // document.getElementById(answerDiv).innerHTML=(response.data.choices[0].message.content);

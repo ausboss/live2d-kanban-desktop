@@ -133,66 +133,82 @@ function createWindow () {
       } //打开设置
     },
     {
-      label: '检查更新',
-      click: function () {shell.openExternal("http://studio.zerolite.cn")} //打开相应页面
+      label: 'Check for updates',
+      click: function () {shell.openExternal("http://studio.zerolite.cn")} // Open corresponding page
     },
     {
-      label: '关于',
+      label: 'About',
       click: function () {
         dialog.showMessageBox({
-          title  : '关于', 
+          title  : 'About', 
           type  : 'info', 
           message : packageGet.name+" v"+packageGet.version+' Stable Powered By Electron™.'
         })
-      } //打开相应页面
+      } // Open corresponding page
     },
     {
-        label: PoinThrough,
-        submenu: [
-          {
-            label: '关闭点击穿透',
-            click: function () {win.setIgnoreMouseEvents(false);}, //设置点击穿透
-            type: 'radio'
-          },
-          {
-            label: '启用点击穿透',
-            click: function () {win.setIgnoreMouseEvents(true);}, //设置点击穿透
-            type: 'radio'
-          },
-        ],
-    },
-    {
-      label: '总在最上',
+      label: 'Penetration',
       submenu: [
         {
-          label: '开启总在最上',
-          click: function () {win.setAlwaysOnTop(true);settings_ontop=true;}, //设置总在最上
+          label: 'Disable Penetration',
+          click: function () {win.setIgnoreMouseEvents(false);}, // Set no penetration
           type: 'radio'
         },
         {
-          label: '关闭总在最上',
-          click: function () {win.setAlwaysOnTop(false);settings_ontop=false;}, //取消设置总在最上
+          label: 'Enable Penetration',
+          click: function () {win.setIgnoreMouseEvents(true);}, // Set penetration
           type: 'radio'
         },
       ],
-  },
+    },
+    
     {
-        label: '退出',
-        click: function () {
-          dialog.showMessageBox({
-            type:"info",
-            buttons:["我手滑了","告辞！"],
-            title:"退出",
-            message:`真的要退出嘛？`
-          }).then((result)=>{
-              if(result.response==1){
-                  console.log("确定");app.quit();
-              }else if(result.response==0){
-                  console.log("取消")
-              }
-          }).catch((error)=>{
-              console.log(error);
-          });
+      label: 'Penetration',
+      submenu: [
+        {
+          label: 'Disable Penetration',
+          click: function () {win.setIgnoreMouseEvents(false);}, // Set no penetration
+          type: 'radio'
+        },
+        {
+          label: 'Enable Penetration',
+          click: function () {win.setIgnoreMouseEvents(true);}, // Set penetration
+          type: 'radio'
+        },
+      ],
+    },
+    {
+      label: 'Always on Top',
+      submenu: [
+        {
+          label: 'Enable Always on Top',
+          click: function () {win.setAlwaysOnTop(true);settings_ontop=true;}, // Set always on top
+          type: 'radio'
+        },
+        {
+          label: 'Disable Always on Top',
+          click: function () {win.setAlwaysOnTop(false);settings_ontop=false;}, // Cancel always on top
+          type: 'radio'
+        },
+      ],
+    },
+    {
+      label: 'Quit',
+      click: function () {
+        dialog.showMessageBox({
+          type:"info",
+          buttons:["Oops","Goodbye"],
+          title:"Quit",
+          message:`Are you sure you want to quit?`
+        }).then((result)=>{
+          if(result.response==1){
+            console.log("Confirmed");app.quit();
+          }else if(result.response==0){
+            console.log("Cancelled")
+          }
+        }).catch((error)=>{
+          console.log(error);
+        });
         }
     }
 ];

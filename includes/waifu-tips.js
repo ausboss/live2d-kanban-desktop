@@ -25,8 +25,8 @@ delete window.module;
 const { ipcRenderer,shell } = nodeRequire('electron'); //Electron 依赖调入
 
 // 后端接口
-live2d_settings.modelAPI             = '//waifuapi.zerolite.cn/live2d-api/';   // 自建 API 修改这里
-live2d_settings.tipsMessage          = 'waifu-tips.json';            // 同目录下可省略路径
+// live2d_settings.modelAPI             = '//waifuapi.zerolite.cn/live2d-api/';   // 自建 API 修改这里
+// live2d_settings.tipsMessage          = 'waifu-tips.json';            // 同目录下可省略路径
 // live2d_settings.hitokotoAPI          = 'hitokoto.cn';                // 一言 API，可选 'lwl12.com', 'hitokoto.cn', 'jinrishici.com'(古诗词)
 live2d_settings.eyeProtInfo          = true;                         //启用使用时长提醒
 // Variables for time reminder
@@ -59,12 +59,12 @@ live2d_settings.modelStorage = true; // Record ID (restore after refresh), optio
 live2d_settings.modelRandMode = 'switch'; // Model switching, optional 'rand' (random), 'switch' (order)
 live2d_settings.modelTexturesRandMode = 'rand'; // Material switching, optional 'rand' (random), 'switch' (order)
 
-// Prompt message options
-live2d_settings.showHitokoto = true; // Show hitokoto
-live2d_settings.showF12Status = true; // Show loading status
-live2d_settings.showF12Message = true; // Show character message
-live2d_settings.showF12OpenMsg = true; // Show console open prompt
-live2d_settings.showWelcomeMessage = true; // Show welcome message when entering the page
+// Prompt message false
+live2d_settings.showHitokoto = false; // Show hitokoto
+live2d_settings.showF12Status = false; // Show loading status
+live2d_settings.showF12Message = false; // Show character message
+live2d_settings.showF12OpenMsg = false; // Show console open prompt
+live2d_settings.showWelcomeMessage = false; // Show welcome message when entering the page
 
 // Waifu Style Settings
 live2d_settings.waifuSize = '300x360';    // Size of the waifu, e.g. '280x250', '600x535'
@@ -144,9 +144,9 @@ function showMessageLocked(text,timeout,flag) {
         if (flag) {sessionStorage.setItem('waifu-text', text);}
         
         $('.waifu-tips').stop();
-        $('.waifu-tips').html(text).fadeTo(200, 1);
+        $('.waifu-tips').html(text).fadeTo(20, 1);
         ShowMessageLocker = 1; //对话内容加锁
-        if (timeout != undefined) {hideMessage(timeout);}
+        if (timeout != undefined) {hideMessage(500);}
     }
 } 
 function hideMessageLocked(timeout) {
@@ -171,19 +171,18 @@ function showMessage(text, timeout, flag) {
             
             $('.waifu-tips').stop();
             $('.waifu-tips').html(text).fadeTo(200, 1);
-            if (timeout === undefined) {timeout = 5000;}
+            if (timeout === undefined) {timeout = 50;}
             hideMessage(timeout);
         }
     }
 }
 
-function hideMessage(timeout) {
-	'use strict';
+function hideMessage() {
     $('.waifu-tips').stop().css('opacity',1);
-    if (timeout === undefined) {timeout = 5000;}
-    window.setTimeout(function() {sessionStorage.removeItem('waifu-text');}, timeout);
-    $('.waifu-tips').delay(timeout).fadeTo(200, 0);
+    window.setTimeout(function() {sessionStorage.removeItem('waifu-text');}, 700);
+    $('.waifu-tips').delay(700).fadeTo(200, 0);
 }
+
 
 /*************************************模型初始化提醒*************************************/
 
@@ -205,8 +204,10 @@ function initModel(waifuPath, type) {
     $(".waifu-tips").width(live2d_settings.waifuTipsSize[0]);
     $(".waifu-tips").height(live2d_settings.waifuTipsSize[1]);
     $(".waifu-tips").css("top",live2d_settings.waifuToolTop);
+    $(".waifu-tips").css("visibility", "hidden");
     $(".waifu-tips").css("font-size",live2d_settings.waifuFontSize);
     $(".waifu-tool").css("font-size",live2d_settings.waifuToolFont);
+
     $(".waifu-tool span").css("line-height",live2d_settings.waifuToolLine);
     if (live2d_settings.waifuEdgeSide[0] === 'left') $(".waifu").css("left",live2d_settings.waifuEdgeSide[1]+'px');
     else if (live2d_settings.waifuEdgeSide[0] === 'right') $(".waifu").css("right",live2d_settings.waifuEdgeSide[1]+'px');
@@ -289,38 +290,38 @@ function loadModel(modelId, modelTexturesId=0) {
 function loadTipsMessage(result) {
     window.waifu_tips = result;
     
-    $.each(result.mouseover, function (index, tips){
-        $(document).on("mouseover", tips.selector, function (){
-            var text = getRandText(tips.text);
-            text = text.render({text: $(this).text()});
-            showMessage(text, 3000);
-        });
-    });
+    // $.each(result.mouseover, function (index, tips){
+    //     $(document).on("mouseover", tips.selector, function (){
+    //         var text = getRandText(tips.text);
+    //         text = text.render({text: $(this).text()});
+    //         showMessage(text, 3000);
+    //     });
+    // });
 
-    $.each(result.click, function (index, tips){
-        $(document).on("click", tips.selector, function (){
-            var text = getRandText(tips.text);
-            text = text.render({text: $(this).text()});
-            showMessage(text, 3000, true);
-        });
-    });
+    // $.each(result.click, function (index, tips){
+    //     $(document).on("click", tips.selector, function (){
+    //         var text = getRandText(tips.text);
+    //         text = text.render({text: $(this).text()});
+    //         showMessage(text, 300, true);
+    //     });
+    // });
 
-    $.each(result.seasons, function (index, tips){
-        var now = new Date();
-        var after = tips.date.split('-')[0];
-        var before = tips.date.split('-')[1] || after;
+    // $.each(result.seasons, function (index, tips){
+    //     var now = new Date();
+    //     var after = tips.date.split('-')[0];
+    //     var before = tips.date.split('-')[1] || after;
         
-        if((after.split('/')[0] <= now.getMonth()+1 && now.getMonth()+1 <= before.split('/')[0]) && 
-            (after.split('/')[1] <= now.getDate() && now.getDate() <= before.split('/')[1])){
-            var text = getRandText(tips.text);
-            text = text.render({year: now.getFullYear()});
-            showMessage(text, 6000, true);
-        }
-    });
+    //     if((after.split('/')[0] <= now.getMonth()+1 && now.getMonth()+1 <= before.split('/')[0]) && 
+    //         (after.split('/')[1] <= now.getDate() && now.getDate() <= before.split('/')[1])){
+    //         var text = getRandText(tips.text);
+    //         text = text.render({year: now.getFullYear()});
+    //         showMessage(text, 6000, true);
+    //     }
+    // });
     
     if (live2d_settings.showF12OpenMsg) {
         re.toString = function() {
-            showMessage(getRandText(result.waifu.console_open_msg), 5000, true);
+            showMessage(getRandText(result.waifu.console_open_msg), 1, true);
             return '';
         };
     }
@@ -346,43 +347,43 @@ function loadTipsMessage(result) {
 
     /*************************欢迎消息加载**********（删除了主页判断代码）*****************/   
     
-    window.showWelcomeMessage = function(result) {
-        var text;
-        if (/*window.location.href === live2d_settings.homePageUrl*/true) {
-            var now = (new Date()).getHours();
-            if (now > 23 || now <= 5) {text = getRandText(result.waifu.hour_tips['t23-5']);}
-            else if (now > 5 && now <= 7) {text = getRandText(result.waifu.hour_tips['t5-7']);}
-            else if (now > 7 && now <= 11) {text = getRandText(result.waifu.hour_tips['t7-11']);}
-            else if (now > 11 && now <= 14) {text = getRandText(result.waifu.hour_tips['t11-14']);}
-            else if (now > 14 && now <= 17) {text = getRandText(result.waifu.hour_tips['t14-17']);}
-            else if (now > 17 && now <= 19) {text = getRandText(result.waifu.hour_tips['t17-19']);}
-            else if (now > 19 && now <= 21) {text = getRandText(result.waifu.hour_tips['t19-21']);}
-            else if (now > 21 && now <= 23) {text = getRandText(result.waifu.hour_tips['t21-23']);}
-            else {text = getRandText(result.waifu.hour_tips.default);}
-        } else {
-            var referrer_message = result.waifu.referrer_message;
-            if (document.referrer !== '') {
-                var referrer = document.createElement('a');
-                referrer.href = document.referrer;
-                var domain = referrer.hostname.split('.')[1];
-                if (window.location.hostname === referrer.hostname)
-                    text = referrer_message.localhost[0] + document.title.split(referrer_message.localhost[2])[0] + referrer_message.localhost[1];
-                else if (domain === 'baidu')
-                    text = referrer_message.baidu[0] + referrer.search.split('&wd=')[1].split('&')[0] + referrer_message.baidu[1];
-                else if (domain === 'so')
-                    text = referrer_message.so[0] + referrer.search.split('&q=')[1].split('&')[0] + referrer_message.so[1];
-                else if (domain === 'google')
-                    text = referrer_message.google[0] + document.title.split(referrer_message.google[2])[0] + referrer_message.google[1];
-                else {
-                    $.each(result.waifu.referrer_hostname, function(i,val) {if (i===referrer.hostname) referrer.hostname = getRandText(val)});
-                    text = referrer_message.default[0] + referrer.hostname + referrer_message.default[1];
-                }
-            } else text = referrer_message.none[0] + document.title.split(referrer_message.none[2])[0] + referrer_message.none[1];
-        }
-        showMessage(text, 6000);
-    }; if (live2d_settings.showWelcomeMessage) showWelcomeMessage(result);
+    // window.showWelcomeMessage = function(result) {
+    //     var text;
+    //     if (/*window.location.href === live2d_settings.homePageUrl*/true) {
+    //         var now = (new Date()).getHours();
+    //         if (now > 23 || now <= 5) {text = getRandText(result.waifu.hour_tips['t23-5']);}
+    //         else if (now > 5 && now <= 7) {text = getRandText(result.waifu.hour_tips['t5-7']);}
+    //         else if (now > 7 && now <= 11) {text = getRandText(result.waifu.hour_tips['t7-11']);}
+    //         else if (now > 11 && now <= 14) {text = getRandText(result.waifu.hour_tips['t11-14']);}
+    //         else if (now > 14 && now <= 17) {text = getRandText(result.waifu.hour_tips['t14-17']);}
+    //         else if (now > 17 && now <= 19) {text = getRandText(result.waifu.hour_tips['t17-19']);}
+    //         else if (now > 19 && now <= 21) {text = getRandText(result.waifu.hour_tips['t19-21']);}
+    //         else if (now > 21 && now <= 23) {text = getRandText(result.waifu.hour_tips['t21-23']);}
+    //         else {text = getRandText(result.waifu.hour_tips.default);}
+    //     } else {
+    //         var referrer_message = result.waifu.referrer_message;
+    //         if (document.referrer !== '') {
+    //             var referrer = document.createElement('a');
+    //             referrer.href = document.referrer;
+    //             var domain = referrer.hostname.split('.')[1];
+    //             if (window.location.hostname === referrer.hostname)
+    //                 text = referrer_message.localhost[0] + document.title.split(referrer_message.localhost[2])[0] + referrer_message.localhost[1];
+    //             else if (domain === 'baidu')
+    //                 text = referrer_message.baidu[0] + referrer.search.split('&wd=')[1].split('&')[0] + referrer_message.baidu[1];
+    //             else if (domain === 'so')
+    //                 text = referrer_message.so[0] + referrer.search.split('&q=')[1].split('&')[0] + referrer_message.so[1];
+    //             else if (domain === 'google')
+    //                 text = referrer_message.google[0] + document.title.split(referrer_message.google[2])[0] + referrer_message.google[1];
+    //             else {
+    //                 $.each(result.waifu.referrer_hostname, function(i,val) {if (i===referrer.hostname) referrer.hostname = getRandText(val)});
+    //                 text = referrer_message.default[0] + referrer.hostname + referrer_message.default[1];
+    //             }
+    //         } else text = referrer_message.none[0] + document.title.split(referrer_message.none[2])[0] + referrer_message.none[1];
+    //     }
+    //     showMessage(text, 6000);
+    // }; if (live2d_settings.showWelcomeMessage) showWelcomeMessage(result);
     
-    var waifu_tips = result.waifu;
+    // var waifu_tips = result.waifu;
     
     function loadOtherModel() {
         var modelId = modelStorageGetItem('modelId');
@@ -423,78 +424,78 @@ function loadTipsMessage(result) {
     
     /*********************** 检测用户活动状态，并在空闲时显示一言 **************************/
     
-    if (live2d_settings.showHitokoto) {
-        window.getActed = false; window.hitokotoTimer = 0; window.hitokotoInterval = false;
-        $(document).mousemove(function(e){getActed = true;}).keydown(function(){getActed = true;});
-        setInterval(function(){ if (!getActed) ifActed(); else elseActed(); }, 1000);
-    }
+    // if (live2d_settings.showHitokoto) {
+    //     window.getActed = false; window.hitokotoTimer = 0; window.hitokotoInterval = false;
+    //     $(document).mousemove(function(e){getActed = true;}).keydown(function(){getActed = true;});
+    //     setInterval(function(){ if (!getActed) ifActed(); else elseActed(); }, 1000);
+    // }
     
-    function ifActed() {
-        if (!hitokotoInterval) {
-            hitokotoInterval = true;
-            hitokotoTimer = window.setInterval(showHitokotoActed, 10000);
-        }
-    }
+    // function ifActed() {
+    //     if (!hitokotoInterval) {
+    //         hitokotoInterval = true;
+    //         hitokotoTimer = window.setInterval(showHitokotoActed, 10000);
+    //     }
+    // }
     
-    function elseActed() {
-        getActed = hitokotoInterval = false;
-        window.clearInterval(hitokotoTimer);
-    }
+    // function elseActed() {
+    //     getActed = hitokotoInterval = false;
+    //     window.clearInterval(hitokotoTimer);
+    // }
 
-    function showHitokotoActed() {
-        if ($(document)[0].visibilityState === 'visible') showHitokoto();
-    }
+    // function showHitokotoActed() {
+    //     if ($(document)[0].visibilityState === 'visible') showHitokoto();
+    // }
     
-    function showHitokoto() {
-        switch(live2d_settings.hitokotoAPI) {
-            case 'lwl12.com':
-                $.getJSON('https://api.lwl12.com/hitokoto/v1?encode=realjson',function(result){
-                    if (!empty(result.source)) {
-                        var text = waifu_tips.hitokoto_api_message['lwl12.com'][0];
-                        if (!empty(result.author)) text += waifu_tips.hitokoto_api_message['lwl12.com'][1];
-                        text = text.render({source: result.source, creator: result.author});
-                        window.setTimeout(function() {showMessage(text+waifu_tips.hitokoto_api_message['lwl12.com'][2], 3000, true);}, 5000);
-                    } showMessage(result.text, 5000, true);
-                });break;
-            case 'fghrsh.net':
-                $.getJSON('https://api.fghrsh.net/hitokoto/rand/?encode=jsc&uid=3335',function(result){
-                    if (!empty(result.source)) {
-                        var text = waifu_tips.hitokoto_api_message['fghrsh.net'][0];
-                        text = text.render({source: result.source, date: result.date});
-                        window.setTimeout(function() {showMessage(text, 3000, true);}, 5000);
-                        showMessage(result.hitokoto, 5000, true);
-                    }
-                });break;
-            case 'jinrishici.com':
-                $.ajax({
-                    url: 'https://v2.jinrishici.com/one.json',
-                    xhrFields: {withCredentials: true},
-                    success: function (result, status) {
-                        if (!empty(result.data.origin.title)) {
-                            var text = waifu_tips.hitokoto_api_message['jinrishici.com'][0];
-                            text = text.render({title: result.data.origin.title, dynasty: result.data.origin.dynasty, author:result.data.origin.author});
-                            window.setTimeout(function() {showMessage(text, 3000, true);}, 5000);
-                        } showMessage(result.data.content, 5000, true);
-                    }
-                });break;
-    	    default:
-    	        $.getJSON('https://v1.hitokoto.cn',function(result){
-            	    if (!empty(result.from)) {
-						var uuid1 = result.uuid;
-						var url0 = 'https://hitokoto.cn/api/restful/v1/like?sentence_uuid='+uuid1;
-                        var text = waifu_tips.hitokoto_api_message['hitokoto.cn'][0];
-						$.getJSON(url0,function(rate){
-					    $.each(rate, function (i, items) {
+    // function showHitokoto() {
+    //     switch(live2d_settings.hitokotoAPI) {
+    //         case 'lwl12.com':
+    //             $.getJSON('https://api.lwl12.com/hitokoto/v1?encode=realjson',function(result){
+    //                 if (!empty(result.source)) {
+    //                     var text = waifu_tips.hitokoto_api_message['lwl12.com'][0];
+    //                     if (!empty(result.author)) text += waifu_tips.hitokoto_api_message['lwl12.com'][1];
+    //                     text = text.render({source: result.source, creator: result.author});
+    //                     window.setTimeout(function() {showMessage(text+waifu_tips.hitokoto_api_message['lwl12.com'][2], 3000, true);}, 5000);
+    //                 } showMessage(result.text, 5000, true);
+    //             });break;
+    //         case 'fghrsh.net':
+    //             $.getJSON('https://api.fghrsh.net/hitokoto/rand/?encode=jsc&uid=3335',function(result){
+    //                 if (!empty(result.source)) {
+    //                     var text = waifu_tips.hitokoto_api_message['fghrsh.net'][0];
+    //                     text = text.render({source: result.source, date: result.date});
+    //                     window.setTimeout(function() {showMessage(text, 3000, true);}, 5000);
+    //                     showMessage(result.hitokoto, 5000, true);
+    //                 }
+    //             });break;
+    //         case 'jinrishici.com':
+    //             $.ajax({
+    //                 url: 'https://v2.jinrishici.com/one.json',
+    //                 xhrFields: {withCredentials: true},
+    //                 success: function (result, status) {
+    //                     if (!empty(result.data.origin.title)) {
+    //                         var text = waifu_tips.hitokoto_api_message['jinrishici.com'][0];
+    //                         text = text.render({title: result.data.origin.title, dynasty: result.data.origin.dynasty, author:result.data.origin.author});
+    //                         window.setTimeout(function() {showMessage(text, 3000, true);}, 5000);
+    //                     } showMessage(result.data.content, 5000, true);
+    //                 }
+    //             });break;
+    // 	    default:
+    // 	        $.getJSON('https://v1.hitokoto.cn',function(result){
+    //         	    if (!empty(result.from)) {
+	// 					var uuid1 = result.uuid;
+	// 					var url0 = 'https://hitokoto.cn/api/restful/v1/like?sentence_uuid='+uuid1;
+    //                     var text = waifu_tips.hitokoto_api_message['hitokoto.cn'][0];
+	// 					$.getJSON(url0,function(rate){
+	// 				    $.each(rate, function (i, items) {
 						
-                  text = text.render({source: result.from, creator: result.creator, rate: rate["data"][0]["total"]});}); });
-                        window.setTimeout(function() {showMessage(text, 3000, true);}, 5000);
-            	    }
+    //               text = text.render({source: result.from, creator: result.creator, rate: rate["data"][0]["total"]});}); });
+    //                     window.setTimeout(function() {showMessage(text, 3000, true);}, 5000);
+    //         	    }
 				
 				
-                showMessage(result.hitokoto, 5000, true);
-                });
-    	}
-    }
+    //             showMessage(result.hitokoto, 5000, true);
+    //             });
+    // 	}
+    // }
 
     /*************************************亮度遮罩*************************************/
     
@@ -515,7 +516,8 @@ function loadTipsMessage(result) {
     window.addEventListener('keydown', function (e) {
         if (e.altKey && e.keyCode === 88) { //Alt+X:关闭
             cover(brightness = 0);
-            showMessage('感觉一切都亮起来了呢！', 3000, true);
+            showMessage('I feel like everything just lit up!', 3000, true);
+
         }
         if (e.altKey && e.keyCode === 38) { //Alt+↑:增加亮度
             if (brightness - 0.05 > 0.05) cover(brightness -= 0.05);
@@ -540,40 +542,40 @@ $('.waifu-tool .fui-moon').click(function() {
   });
   
     /*日程提醒模块点击*/
-    if(live2d_settings.eyeProtInfo){
-        $('.waifu-tool .fui-eyeProtInfo').click(function(){
-          document.getElementById('NLPInfinite').style.display = 'block';
-          $('#timeset').focus();
-          if(isTimeSet === true && setTime != "" && setTime > 0){
-            document.getElementById('TimeDisplay').innerHTML = "Remaining time until the scheduled end: "+(setTime-(new Date()-date)/60000).toFixed(1)+" minutes";
-          } else {
-            document.getElementById('TimeDisplay').innerHTML = "No scheduled time";
-          }
-        });
-      }
+    // if(live2d_settings.eyeProtInfo){
+    //     $('.waifu-tool .fui-eyeProtInfo').click(function(){
+    //       document.getElementById('NLPInfinite').style.display = 'block';
+    //       $('#timeset').focus();
+    //       if(isTimeSet === true && setTime != "" && setTime > 0){
+    //         document.getElementById('TimeDisplay').innerHTML = "Remaining time until the scheduled end: "+(setTime-(new Date()-date)/60000).toFixed(1)+" minutes";
+    //       } else {
+    //         document.getElementById('TimeDisplay').innerHTML = "No scheduled time";
+    //       }
+    //     });
+    //   }
       
 	
-    /*************************日程提醒函数*************************/
-	function Schedulefunc() {
-        timer = setInterval(function() {
-          showMessage(`Your scheduled event "${timercontext}" reminder time ${setTime} has arrived!`, 5000, true);
-          let myNotification = new Notification("日程提醒", {
-            title: 'Reminder', 
-            subtitle: 'Kanban-Desktop', 
-            body: 'Your scheduled event time has arrived. Click this message to stop ringing.',
-            silent: false, 
-            icon: './assets/notifi.jpg', 
-            timeoutType: 'never', 
-          });
-          var rand = Math.floor(Math.random() * 6);
-          var audio = new Audio(`./Alert Alarms/alert${rand}.mp3`); 
-          audio.play();
-          myNotification.onclick = () => {
-            audio.pause();
-          };
-          date = new Date();
-        }, setTime * 60000);
-      }
+    // /*************************日程提醒函数*************************/
+	// function Schedulefunc() {
+    //     timer = setInterval(function() {
+    //       showMessage(`Your scheduled event "${timercontext}" reminder time ${setTime} has arrived!`, 5000, true);
+    //       let myNotification = new Notification("日程提醒", {
+    //         title: 'Reminder', 
+    //         subtitle: 'Kanban-Desktop', 
+    //         body: 'Your scheduled event time has arrived. Click this message to stop ringing.',
+    //         silent: false, 
+    //         icon: './assets/notifi.jpg', 
+    //         timeoutType: 'never', 
+    //       });
+    //       var rand = Math.floor(Math.random() * 6);
+    //       var audio = new Audio(`./Alert Alarms/alert${rand}.mp3`); 
+    //       audio.play();
+    //       myNotification.onclick = () => {
+    //         audio.pause();
+    //       };
+    //       date = new Date();
+    //     }, setTime * 60000);
+    //   }
       
 
 	//工具栏默认隐藏
@@ -592,35 +594,36 @@ $('.waifu-tool .fui-moon').click(function() {
 	
     /***********************************日程提醒 设定****************************************/
 	
-    $('.timesetButton').click(function(){
-		setTime = document.getElementById('timeset').value; //获取日程时间
-        timercontext = document.getElementById('contextset').value; //获取日程内容
-		isTimeSet = true;
-		if(setTime != "" && setTime > 0 && setTime <= 3000)
-		{ date = new Date();
-		var hours = date.getHours();          //小时 ,返回 Date 对象的小时 (0 ~ 23)
-		var minutes = date.getMinutes()+parseInt(setTime);
-		for(let i =1;i!=500;i++)
-			{if(minutes>=60)
-				{
-					minutes-=60;
-					hours++;
-				}
-			if(hours>=24)
-				{hours-=24;}
-			}
-		document.getElementById('TimeDisplay').innerHTML = "日程将在 "+hours.toString().padStart(2, '0')+":"+minutes.toString().padStart(2, '0')+" 时提醒";
-		Schedulefunc();
-		}
-		else {document.getElementById('TimeDisplay').innerHTML = "请输入有效的时间，单位分钟";}
-	});
-	
-    /***********************************日程提醒 重置****************************************/
-	
-    $('.timeresetButton').click(function(){
-		isTimeSet = false;
-		setTime = 0;
-		timer = window.clearInterval(timer);
-		document.getElementById('TimeDisplay').innerHTML = "没有安排的日程";
-	});
+    // $('.timesetButton').click(function(){
+    //     setTime = document.getElementById('timeset').value; // Get schedule time
+    //     timercontext = document.getElementById('contextset').value; // Get schedule content
+    //     isTimeSet = true;
+    //     if (setTime != "" && setTime > 0 && setTime <= 3000) {
+    //         date = new Date();
+    //         var hours = date.getHours(); // Hour, returns the hour of a Date object (0-23)
+    //         var minutes = date.getMinutes() + parseInt(setTime);
+    //         for (let i = 1; i != 500; i++) {
+    //             if (minutes >= 60) {
+    //                 minutes -= 60;
+    //                 hours++;
+    //             }
+    //             if (hours >= 24) {
+    //                 hours -= 24;
+    //             }
+    //         }
+    //         document.getElementById('TimeDisplay').innerHTML = "Schedule will remind at " + hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0') + ".";
+    //         Schedulefunc();
+    //     } else {
+    //         document.getElementById('TimeDisplay').innerHTML = "Please enter valid time in minutes.";
+    //     }
+    // });
+    
+    /***********************************Schedule Reminder Reset****************************************/
+    
+    // $('.timeresetButton').click(function(){
+    //     isTimeSet = false;
+    //     setTime = 0;
+    //     timer = window.clearInterval(timer);
+    //     document.getElementById('TimeDisplay').innerHTML = "No scheduled tasks.";
+    // });
 }

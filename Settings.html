@@ -32,7 +32,7 @@
         </div>
         <!-- <div class="closeset"  onclick="closeset();"><image src="./assets/Cross.png"></image></div> -->
         <div class="setTab" id="setTab"> <!--设置tab-->
-            <h3 style="position:absolute;margin-left:15px;">设置</h3>
+            <h3 style="position:absolute;margin-left:15px;">Settings</h3>
             <div class="setTabBrickHighlight" id="setTabHighLight" style="right:293px"></div>
             <div class="setTabBrick" id="setTabA" style="right:280px" onclick="setpageA()">
                 <svg t="1658426400568" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -57,7 +57,7 @@
                         d="M466.986667 85.333333v209.92h-208.64V85.333333A234.666667 234.666667 0 0 0 128 294.186667 177.92 177.92 0 0 0 277.333333 469.333333a528 528 0 0 0 85.333334 7.253334 528 528 0 0 0 85.333333-7.253334 177.92 177.92 0 0 0 149.333333-175.36A234.666667 234.666667 0 0 0 466.986667 85.333333z"
                         fill="#FF9800" p-id="15446"></path>
                 </svg>
-                &nbsp;&nbsp;&nbsp;&nbsp;功能<!--<div style="position:absolute;left: 8%;right: 8%;top:60%;font-size:1.8vw;">功能设置</div>-->
+                &nbsp;&nbsp;&nbsp;&nbsp;Functionality<!--<div style="position:absolute;left: 8%;right: 8%;top:60%;font-size:1.8vw;">Functionality Settings</div>-->
             </div>
             <div class="setTabBrick" id="setTabB" onclick="setpageB()" style="right:175px">
                 <svg t="1658426137514" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -71,7 +71,7 @@
                         d="M1006.40768 264.31488a68.21888 68.21888 0 0 0-29.04064-30.39232L548.00384 7.68a67.51232 67.51232 0 0 0-62.49472 0L56.50432 232.448a66.44736 66.44736 0 0 0-17.64352 15.74912 73.25696 73.25696 0 0 0-11.02848 14.27456A67.87072 67.87072 0 0 0 20.48 291.76832v439.33696a67.33824 67.33824 0 0 0 36.7616 59.31008l428.99456 224.79872c9.32864 5.29408 19.79392 8.31488 30.5152 8.78592h5.15072a64.53248 64.53248 0 0 0 26.10176-6.9632L976.9984 792.25856A67.33824 67.33824 0 0 0 1013.76 732.93824V291.76832a64.23552 64.23552 0 0 0-7.35232-27.45344z m-80.50688 39.90528l-404.3776 199.168-4.77184 2.56v427.25376L107.60192 719.02208V303.85152l15.81056-8.41728L516.75136 89.67168l408.04352 213.8112 1.10592 0.73728z"
                         fill="#40A9FF" p-id="3581"></path>
                 </svg>
-                &nbsp;&nbsp;&nbsp;个性化<!--<div style="position:absolute;left: 1%;right: 1%;top:60%;font-size:1.8vw;">个性化设置</div>-->
+                &nbsp;&nbsp;&nbsp;Personalization<!--<div style="position:absolute;left: 1%;right: 1%;top:60%;font-size:1.8vw;">Personalization Settings</div>-->
             </div>
             <div class="setTabBrick" id="setTabC" onclick="setpageC()" style="right:70px">
                 <svg class="icon" height=55% style='left:5px;' viewBox="0 0 1024 1024" version="1.1"
@@ -81,7 +81,7 @@
                         fill="#5288F5" p-id="857"></path>
                     <path d="M652.288 572.63104H376.832v-68.4544h275.456v68.4544z" fill="#F79C42" p-id="858"></path>
                 </svg>
-                &nbsp;&nbsp;&nbsp;实验室<!--<div style="position:absolute;left: 8%;right: 8%;top:60%;font-size:1.7vw;">实验室与关于</div>-->
+                &nbsp;&nbsp;&nbsp;Lab<!--<div style="position:absolute;left: 8%;right: 8%;top:60%;font-size:1.7vw;">Lab and About</div>-->
             </div>
             <div class="setTabBrickSmall" id="setTabInfo" onclick="setpageInfo()" style="right:20px;">
                 <svg t="1670141928749" class="icon" viewBox="0 0 1024 1024" version="1.1"
@@ -280,53 +280,74 @@
         </div>
         <div class="setpage" id="setpageInfo" style="display: none;">
             <div class="setpageINNER">
-                <h3 style="margin-top:15px;margin-bottom:15px;margin-left:13px;">🚀 关于Kanban-Desktop</h3>
-                <div style="text-align: center;"><img src="./assets/app.png" alt="App Info" width="84" height="84">
+                <h3 style="margin-top:15px;margin-bottom:15px;margin-left:13px;">🚀 About Kanban-Desktop</h3>
+                <div style="text-align: center;">
+                    <img src="./assets/app.png" alt="App Info" width="84" height="84">
                 </div>
-                <div class="brickContainer">当前版本<p id="App_Ver" class="brickRightText"></p>
+                <div class="brickContainer">
+                    <p>Current version:</p>
+                    <p id="App_Ver" class="brickRightText"></p>
                 </div>
                 <div class="brickContainer" id="if_have_update">
                     <div id="update_ver_get" style="position:absolute;left:10px"></div>
-                    <button type="button" value="查看更新"
+                    <button type="button" value="View Update"
                         onclick="shell.openExternal('https://github.com/JimHans/live2d-kanban-desktop/releases/latest');"
-                        class="button" id="update_button">查看更新</button>
+                        class="button" id="update_button">View Update</button>
                 </div>
-                <div class="brickContainer">Build Version<p id="App_Build" class="brickRightText"></p>
+                <div class="brickContainer">
+                    <p>Build Version:</p>
+                    <p id="App_Build" class="brickRightText"></p>
                 </div>
-                <!-- *版本信息 -->
-                <div class="brickContainer">Node.js 版本<span id="node-version" class="brickRightText"></span></div>
-                <div class="brickContainer">Chromium 内核版本<span id="chrome-version" class="brickRightText"></span></div>
-                <div class="brickContainer">Electron 框架版本<span id="electron-version" class="brickRightText"></span>
+                <!-- * Version information -->
+                <div class="brickContainer">
+                    <p>Node.js version:</p>
+                    <span id="node-version" class="brickRightText"></span>
                 </div>
-                <div class="brickContainer">Designed By<span class="brickRightText">JimHan @ Zerolite
-                        Studio</span><!--<p style="font-size: 14px;margin-bottom:-5px;">Designed By JimHan @ Zerolite Studio</p>-->
+                <div class="brickContainer">
+                    <p>Chromium core version:</p>
+                    <span id="chrome-version" class="brickRightText"></span>
+                </div>
+                <div class="brickContainer">
+                    <p>Electron framework version:</p>
+                    <span id="electron-version" class="brickRightText"></span>
+                </div>
+                <div class="brickContainer">
+                    <p>Designed By:</p>
+                    <span class="brickRightText">JimHan @ Zerolite Studio</span>
+                    <!-- <p style="font-size: 14px;margin-bottom:-5px;">Designed By JimHan @ Zerolite Studio</p> -->
                 </div>
             </div>
+        </div>
+        
         </div>
     </div>
 </body>
 <script>
-    const { ipcRenderer, shell } = nodeRequire('electron'); //Electron 依赖调入
-    window.onload = function () { //获取软件版本号
-        var package = nodeRequire("./package.json");
-        document.getElementById("App_Ver").innerHTML = package.name + " v" + package.version; // Get Version
-        document.getElementById("App_Build").innerHTML = package.buildinf; // Get Build
-        for (const versionType of ['chrome', 'electron', 'node']) {
-            document.getElementById(`${versionType}-version`).innerText = process.versions[versionType]  // Get Framework
-        }
-        // *更新检测
-        $.getJSON("https://api.github.com/repos/jimhans/live2d-kanban-desktop/releases/latest", function (data1) {
-            document.getElementById('update_button').style.backgroundColor = '#252525';
-            if (data1.tag_name != ("v" + package.version)) {
-                document.getElementById('setTabInfo').style.backgroundColor = '#393d1b';
-                document.getElementById('info_icon').style.fill = '#6ccb5f';
-                document.getElementById('update_ver_get').innerText = '有新版本：版本号 ' + data1.tag_name;
-                document.getElementById('if_have_update').style.backgroundColor = '#393d1b';
-            }
-            else { document.getElementById('update_ver_get').innerText = '当前是最新版本'; document.getElementById('if_have_update').style.backgroundColor = '#2b4f6c'; }
-        }).fail(function () { document.getElementById('update_ver_get').innerText = '无法检测到版本更新数据' });
+const { ipcRenderer, shell } = nodeRequire('electron'); // Import Electron dependencies
+window.onload = function () { // Get software version number
+    var package = nodeRequire("./package.json");
+    document.getElementById("App_Ver").innerHTML = package.name + " v" + package.version; // Get Version
+    document.getElementById("App_Build").innerHTML = package.buildinf; // Get Build
+    for (const versionType of ['chrome', 'electron', 'node']) {
+        document.getElementById(`${versionType}-version`).innerText = process.versions[versionType]  // Get Framework
     }
-
+    // * Update check
+    $.getJSON("https://api.github.com/repos/jimhans/live2d-kanban-desktop/releases/latest", function (data1) {
+        document.getElementById('update_button').style.backgroundColor = '#252525';
+        if (data1.tag_name != ("v" + package.version)) {
+            document.getElementById('setTabInfo').style.backgroundColor = '#393d1b';
+            document.getElementById('info_icon').style.fill = '#6ccb5f';
+            document.getElementById('update_ver_get').innerText = 'New version available: Version ' + data1.tag_name;
+            document.getElementById('if_have_update').style.backgroundColor = '#393d1b';
+        }
+        else { 
+            document.getElementById('update_ver_get').innerText = 'You are using the latest version'; 
+            document.getElementById('if_have_update').style.backgroundColor = '#2b4f6c'; 
+        }
+    }).fail(function () { 
+        document.getElementById('update_ver_get').innerText = 'Unable to check for version update data'; 
+    });
+}
     // 初始化PageA复选框
     var checkboxAInit = document.getElementsByName("checkboxA");
     //循环多选框数组
@@ -363,7 +384,7 @@
     if (localStorage.getItem(checkboxCInit[0].value) == 'true') { checkboxCInit[0].checked = true; }
     if (localStorage.getItem(checkboxCInit[3].value) == 'true') {
         checkboxCInit[3].checked = true;
-        document.getElementById("localModelCurrentPath").innerHTML = "当前文件为" + localStorage.getItem('localModelPath');
+        document.getElementById("localModelCurrentPath").innerHTML = "Current file is " + localStorage.getItem('localModelPath');
     }
     if (localStorage.getItem(checkboxCInit[4].value) == 'true') { checkboxCInit[4].checked = true; }
     if ((!localStorage.getItem("ChatgptKey")) || localStorage.getItem("ChatgptKey") == "") { checkboxCInit[5].value = ""; }
@@ -466,7 +487,7 @@
             var BubblePic = 0;
             if (!/image\/\w+/.test(selectedBubble.type))           //判断获取的是否为图片文件
             {
-                alert("请确保文件为图像文件");
+                alert("Please make sure the file is an image file");
                 return false;
             }
             var reader = new FileReader();
@@ -499,7 +520,7 @@
             var Filename = selectedModel.name;//读取选中文件的文件名
             var ModelUrl = selectedModel.path;
             localStorage.setItem("localModelPath", ModelUrl); //保存ModelPath
-            document.getElementById("localModelCurrentPath").innerHTML = "当前文件为" + localStorage.getItem('localModelPath');
+            document.getElementById("localModelCurrentPath").innerHTML = "Current file is " + localStorage.getItem('localModelPath');
             console.log(Filename, ModelUrl);
         }
         ipcRenderer.send('Mainpage', 'Refresh');

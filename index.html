@@ -44,16 +44,17 @@
 			<path d="M785.92 361.984H517.12V243.2c0-27.136-36.864-65.536-76.8-30.208-39.936 34.816-220.672 225.28-245.248 249.344-28.672 28.672-21.504 76.288 0 98.304 24.064 24.576 205.312 215.552 245.248 250.368 39.936 35.328 76.8-3.072 76.8-30.208v-118.784h268.8c33.792 0 61.44-27.648 61.44-61.44V423.424c0-33.792-27.136-61.44-61.44-61.44z" fill="#ffffff" p-id="7583" data-spm-anchor-id="a313x.7781069.0.i14" class="selected"></path>
 			</svg>
 			<div style="top:20px;text-align: center;">
-				<input type="text" id="contextset" name="text" placeholder=" 输入你的日程内容" class="timeset" style="text-align: center;" required><!--日程设定-->
-				<input type="text" id="timeset" name="text" placeholder=" 输入你想提示的时间" class="timeset" style="text-align: center;margin-top: 5px;" required><!--日程提醒-->
+				<input type="text" id="contextset" name="text" placeholder="Enter your schedule here" class="timeset" style="text-align: center;" required><!--Schedule set-->
+				<input type="text" id="timeset" name="text" placeholder="Enter the time you want to be reminded" class="timeset" style="text-align: center;margin-top: 5px;" required><!--Schedule reminder-->
 				<div style="margin-top:8px;">
-				<button id="timesetButton" class="timesetButton" style=" background-color: rgba(0,0,0,0.2);
-				border: 2px solid rgba(128,128,128,0.90);width:48px;height:30px; border-radius: 12px;background-image:url(./assets/IconClock.png);background-size: contain;margin-right:15px;"></button> 
-				<button id="timeresetButton" class="timeresetButton" style=" background-color: rgba(0,0,0,0.2);
-				border: 2px solid rgba(128,128,128,0.90);width:48px;height:30px; border-radius: 12px;background-image:url(./assets/IconClear.png);background-size: contain;"></button>
+					<button id="timesetButton" class="timesetButton" style="background-color: rgba(0,0,0,0.2);
+						border: 2px solid rgba(128,128,128,0.90);width:48px;height:30px; border-radius: 12px;background-image:url(./assets/IconClock.png);background-size: contain;margin-right:15px;"></button> 
+					<button id="timeresetButton" class="timeresetButton" style="background-color: rgba(0,0,0,0.2);
+						border: 2px solid rgba(128,128,128,0.90);width:48px;height:30px; border-radius: 12px;background-image:url(./assets/IconClear.png);background-size: contain;"></button>
 				</div>
-				<div id="TimeDisplay" style="margin-top:5px;color: azure; ">没有定时</div>
+				<div id="TimeDisplay" style="margin-top:5px;color: azure;">No schedule set</div>
 			</div>
+			
 		</div>                                     <!--定时设置辅助层-->
 		<div id="NLPask" class="NLPask">            <!--应答iframe-->
 			<span class="fui-cross" onclick="document.getElementById('NLPask').style.display = 'none';document.getElementById('nlp').value='';" style=" font-size: 13px;z-index: 5px;position: absolute;background-image:url(./assets/bg.jpg);padding:5px;right: 0px; border-radius: 5px;" ></span>
@@ -63,12 +64,13 @@
 		<div class="NLPAsk" id="NLPx">
 			<div style="top:0px;background-image:url(./assets/box.jpg);color: #fff;text-align: center;">
 				<form id="AskBox" action="https://www.zerolite.cn/NLP.php" method="post" target="myiframe" name="formphp" align="left" class="AskBox" >
-					<input type="text" id="nlp" name="text" placeholder="输入你的话(。・∀・)ノ" style="border-radius:14px;background-image:url(./assets/box.jpg);border:0px;outline:none;font-size: 15px;margin-left: 5px;height: 27px;width: 160px;color: azure;" align="left" required>
-					<span class="fui-ask" onclick="NLPChange();" id="toolask"  style="text-align: right;border-radius: 12px;background-image:url(./assets/box.jpg);font-size: 15px;z-index: 5px; " ></span>
-					<input type="submit" id="nlpsubmit" name="submit" onkeypress= "none" onclick="document.getElementById('NLPask').style.display = 'block';Search_Engine();" >
+					<input type="text" id="nlp" name="text" placeholder="Enter your text here (。・∀・)ノ" style="border-radius:14px;background-image:url(./assets/box.jpg);border:0px;outline:none;font-size: 15px;margin-left: 5px;height: 27px;width: 160px;color: azure;" align="left" required>
+					<span class="fui-ask" onclick="NLPChange();" id="toolask" style="text-align: right;border-radius: 12px;background-image:url(./assets/box.jpg);font-size: 15px;z-index: 5px;"></span>
+					<input type="submit" id="nlpsubmit" name="submit" onkeypress="none" onclick="document.getElementById('NLPask').style.display = 'block';Search_Engine();">
 				</form>
 			</div>
 		</div>
+		
 		<!--工具箱按钮及主要功能-->
 		<div class="waifu-tool" id= "WAIFUTOOL ICON" style="text-align:center; display:table-cell;  margin-bottom: 35px;top: 230px;width: 35px;border-radius: 12px; background-image:url(./assets/bg.jpg);opacity:0.9;box-shadow: 0px 0px 15px #2F2F2F;"><!--工具箱按钮及主要功能-->
 			<span class="fui-toolicon" onclick="toolopen()" id="toolicon"> </span>
